@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "689163711417",
+    "project_id": "float-ddb9f",
+    "storage_bucket": "float-ddb9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689163711417:android:0af459a89a72bd9108fc68",
+        "android_client_info": {
+          "package_name": "com.alessandroborelli.floatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689163711417-59e8v6l3dsnp8jii40tp3osbbrkmbkt1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfiKwH7f1hbE-ItdtotIxcaotB-6xuFFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689163711417-59e8v6l3dsnp8jii40tp3osbbrkmbkt1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
