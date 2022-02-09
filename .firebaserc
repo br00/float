@@ -1,6 +1,7 @@
 {
   "projects": {
-    "staging": "float-ddb9f"
+    "staging": "float-ddb9f",
+    "default": "float-ddb9f"
   },
   "targets": {}
 }

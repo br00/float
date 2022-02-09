@@ -6,5 +6,5 @@ import javax.inject.Inject
 internal class FirestoreRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore
 ){
-
+    //TODO generic repo?
 }
