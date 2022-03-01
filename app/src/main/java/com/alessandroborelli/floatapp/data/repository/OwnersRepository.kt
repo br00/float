@@ -47,7 +47,7 @@ internal class OwnersRepository @Inject constructor(
             // Success
             emit(State.success(owner))
         } else {
-            emit(State.failed("No owen found for that id"))
+            emit(State.failed("No owner found for that id"))
         }
     }.catch {
         emit(State.failed(it.message.toString()))
