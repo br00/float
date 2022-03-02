@@ -1,8 +1,8 @@
 package com.alessandroborelli.floatapp.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.alessandroborelli.floatapp.data.model.Result
 import com.alessandroborelli.floatapp.base.BaseViewModel
-import com.alessandroborelli.floatapp.data.model.State
 import com.alessandroborelli.floatapp.data.repository.OwnersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -28,24 +28,24 @@ internal class MainViewModel @Inject constructor(
 
     private fun retrieveOwner(state: MainUiState) {
         viewModelScope.launch {
-            ownersRepository.getOwnerDetails("CyBu94TFCDiqFXeCq8rc").collect { ownerState ->
-                when (ownerState) {
-                    is State.Loading -> {
+            ownersRepository.getOwnerDetails("CyBu94TFCDiqFXeCq8rc").collect { result ->
+                when (result) {
+                    is Result.Loading -> {
                         setState(
                             state.copy(
                                 isLoading = true,
                             )
                         )
                     }
-                    is State.Success -> {
+                    is Result.Success -> {
                         setState(
                             state.copy(
                                 isLoading = false,
-                                data = ownerState.data.fullName
+                                data = result.data.fullName
                             )
                         )
                     }
-                    is State.Failed -> {
+                    is Result.Failed -> {
                         // error message here
                     }
                 }
