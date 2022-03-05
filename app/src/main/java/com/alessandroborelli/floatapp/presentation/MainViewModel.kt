@@ -3,7 +3,7 @@ package com.alessandroborelli.floatapp.presentation
 import androidx.lifecycle.viewModelScope
 import com.alessandroborelli.floatapp.data.model.Result
 import com.alessandroborelli.floatapp.base.BaseViewModel
-import com.alessandroborelli.floatapp.data.repository.OwnersRepository
+import com.alessandroborelli.floatapp.domain.usecase.GetMooringsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -11,24 +11,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val ownersRepository: OwnersRepository
+    private val mooringsUseCase: GetMooringsUseCase
 ) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState.initial()) {
 
     init {
-        retrieveOwner(state.value)
+        retrieveMoorings(state.value)
     }
 
     override fun reduce(event: MainUiEvent, state: MainUiState) {
         when (event) {
             is MainUiEvent.ShowHome -> {
-                retrieveOwner(state)
+                retrieveMoorings(state)
             }
         }
     }
 
-    private fun retrieveOwner(state: MainUiState) {
+    private fun retrieveMoorings(state: MainUiState) {
         viewModelScope.launch {
-            ownersRepository.getOwnerDetails("CyBu94TFCDiqFXeCq8rc").collect { result ->
+            mooringsUseCase("Y18x809Swyf3lSnYZzzJ").collect { result ->
                 when (result) {
                     is Result.Loading -> {
                         setState(
@@ -41,12 +41,17 @@ internal class MainViewModel @Inject constructor(
                         setState(
                             state.copy(
                                 isLoading = false,
-                                data = result.data.fullName
+                                data = result.data.data
                             )
                         )
                     }
                     is Result.Failed -> {
-                        // error message here
+                        //TODO error message here
+                        setState(
+                            state.copy(
+                                isLoading = false,
+                            )
+                        )
                     }
                 }
             }
