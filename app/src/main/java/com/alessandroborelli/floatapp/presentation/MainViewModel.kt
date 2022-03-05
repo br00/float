@@ -1,7 +1,7 @@
 package com.alessandroborelli.floatapp.presentation
 
 import androidx.lifecycle.viewModelScope
-import com.alessandroborelli.floatapp.data.model.Result
+import com.alessandroborelli.floatapp.domain.model.Result
 import com.alessandroborelli.floatapp.base.BaseViewModel
 import com.alessandroborelli.floatapp.domain.usecase.GetMooringsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

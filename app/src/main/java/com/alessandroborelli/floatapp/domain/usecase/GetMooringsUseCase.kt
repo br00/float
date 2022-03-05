@@ -1,7 +1,7 @@
 package com.alessandroborelli.floatapp.domain.usecase
 
 import com.alessandroborelli.floatapp.data.model.MooringsResult
-import com.alessandroborelli.floatapp.data.model.Result
+import com.alessandroborelli.floatapp.domain.model.Result
 import com.alessandroborelli.floatapp.data.repository.MooringsRepository
 import com.alessandroborelli.floatapp.domain.mapper.GetMooringsResponseMapper
 import com.alessandroborelli.floatapp.domain.model.MooringResult

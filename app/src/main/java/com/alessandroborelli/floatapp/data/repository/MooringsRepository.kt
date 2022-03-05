@@ -10,22 +10,6 @@ import javax.inject.Inject
 internal class MooringsRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore
 ) {
-//    fun getAllMoorings(boatId: String) = flow<Result<MooringsResult>> {
-//        val collection = firebaseFirestore.collection(Constants.SUB_COLLECTION_MOORINGS(boatId))
-//
-//        emit(Result.loading())
-//
-//        val snapshot = collection.get().await()
-//        val moorings = snapshot.toObjects(Mooring::class.java)
-//        if (moorings.isNullOrEmpty()) {
-//            emit(Result.success(MooringsResult(moorings)))
-//        } else {
-//            emit(Result.failed("No moorings found for the boatId:$boatId"))
-//        }
-//    }.catch {
-//        emit(Result.failed(it.message.toString()))
-//    }.flowOn(Dispatchers.IO)
-
     suspend fun getAllMoorings(boatId: String): MooringsResult {
         val collection = firebaseFirestore.collection(Constants.SUB_COLLECTION_MOORINGS(boatId))
         return try {
@@ -35,7 +19,7 @@ internal class MooringsRepository @Inject constructor(
                 MooringsResult.Failure.NoData
             } else {
                 MooringsResult.Success(
-                    data = moorings
+                    data = moorings.sortedBy { it.creationDate }
                 )
             }
         } catch (e : Exception){

@@ -1,4 +1,4 @@
-package com.alessandroborelli.floatapp.data.model
+package com.alessandroborelli.floatapp.domain.model
 
 sealed class Result<T> {
     class Loading<T> : Result<T>()
