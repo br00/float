@@ -15,7 +15,7 @@ abstract class BaseViewModel<S : UiState, in E : UiEvent>(initialVal: S) : ViewM
         val success = _state.tryEmit(newState)
     }
 
-    protected fun onEvent(event: E) {
+    fun onEvent(event: E) {
         reduce(event, _state.value)
     }
 

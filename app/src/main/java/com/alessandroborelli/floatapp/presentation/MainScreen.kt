@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,20 +33,34 @@ internal fun MainScreen(
     Column {
         when {
             state.isLoading -> LoadingContent()
-            state.data.isNotEmpty() -> MainContent(state.data)
+            state.data.isNotEmpty() ->
+                MainContent(
+                    moorings = state.data,
+                    onAddMooringClicked = {
+                        viewModel.onEvent(MainUiEvent.AddMooring)
+                    }
+                )
         }
     }
 }
 
 @Composable
-fun MainContent(moorings: List<Mooring>) {
-    LazyColumn() {
-        items(
-            items = moorings,
-            itemContent = { mooring ->
-                MooringItem(item = mooring)
+fun MainContent(moorings: List<Mooring>, onAddMooringClicked: () -> Unit) {
+    Column() {
+        LazyColumn() {
+            items(
+                items = moorings,
+                itemContent = { mooring ->
+                    MooringItem(item = mooring)
+                }
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+        Button(
+            modifier = Modifier.padding(start = 16.dp),
+            onClick = onAddMooringClicked) {
+                Text(text = "Add mooring")
             }
-        )
     }
 }
 
@@ -80,7 +95,7 @@ fun MooringItem(item: Mooring) {
                 }
         ) {
             Text(
-                text = item.name,
+                text = item.index.toString(),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Center,
@@ -109,8 +124,9 @@ fun MooringItem(item: Mooring) {
 @Composable
 fun PrevMooringItem() {
     val mooring = Mooring(
-        arrivedOn = "22 Jan (Tue) at 12:30",
-        leftOn = "30 Jan (Tue) at 09:30",
+        index = 1,
+        arrivedOn = "22 Jan (Tue) 12:30",
+        leftOn = "30 Jan (Tue) 09:30",
         creationDate = "",
         lastUpdate = "",
         latitude = "51.53582",

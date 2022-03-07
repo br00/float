@@ -1,5 +1,6 @@
 package com.alessandroborelli.floatapp.data.model
 
+import com.google.firebase.Timestamp
 import java.util.*
 
 
@@ -20,6 +21,7 @@ internal sealed class MooringsResult {
 }
 
 internal data class Mooring(
+    val index: Int? = null,
     val arrivedOn: Date? = null,
     val creationDate: Date? = null,
     val lastUpdate: Date? = null,
@@ -27,4 +29,15 @@ internal data class Mooring(
     val latitude: String? = null,
     val longitude: String? = null,
     val name: String? = null
+)
+
+internal data class MooringDTO(
+//    val lastUpdate: Timestamp,
+//    val leftOn: Timestamp,
+//    val latitude: String,
+//    val longitude: String,
+    val index: Int,
+    val name: String,
+    val creationDate: Timestamp,
+    val arrivedOn: Timestamp,
 )

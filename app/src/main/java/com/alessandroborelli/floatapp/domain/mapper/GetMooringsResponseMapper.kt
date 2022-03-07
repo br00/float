@@ -16,6 +16,7 @@ internal class GetMooringsResponseMapperImpl @Inject constructor():
     GetMooringsResponseMapper {
 
     private companion object {
+        const val UNKNOWN_INDEX = -1
         val DATE_FORMATTER = SimpleDateFormat("dd MMM (E) HH:mm", Locale.ROOT)
     }
 
@@ -23,6 +24,7 @@ internal class GetMooringsResponseMapperImpl @Inject constructor():
         return MooringResult(
             data = result.data.map {
                 Mooring(
+                    index = it.index ?: UNKNOWN_INDEX,
                     arrivedOn = mapDate(it.arrivedOn),
                     creationDate = mapDate(it.creationDate),
                     lastUpdate = mapDate(it.lastUpdate),
