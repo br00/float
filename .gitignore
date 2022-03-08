@@ -86,3 +86,4 @@ lint/tmp/
 
 # Firestore test db
 db
+Firebase_cmds.txt

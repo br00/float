@@ -5,6 +5,7 @@ buildscript {
         fragment_version = '1.4.1'
         compose_version = '1.0.1'
         hilt_version = '2.40.5'
+        mockito_versions = "3.12.1"
     }
     repositories {
         google()
