@@ -6,6 +6,7 @@ data class MooringResult(
 )
 
 data class Mooring(
+    val id: String,
     val index: Int,
     val arrivedOn: String,
     val creationDate: String,

@@ -2,9 +2,11 @@ package com.alessandroborelli.floatapp.data.repository
 
 import com.alessandroborelli.floatapp.data.Constants
 import com.alessandroborelli.floatapp.data.model.Mooring
-import com.alessandroborelli.floatapp.data.model.MooringDTO
+import com.alessandroborelli.floatapp.data.model.AddMooringDTO
 import com.alessandroborelli.floatapp.data.model.MooringsResult
+import com.alessandroborelli.floatapp.data.model.UpdateMooringDTO
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -14,7 +16,14 @@ internal class MooringsRepository @Inject constructor(
     suspend fun getAllMoorings(boatId: String): MooringsResult {
         return try {
             val snapshot = collection(boatId).get().await()
-            val moorings = snapshot.toObjects(Mooring::class.java)
+            val moorings = mutableListOf<Mooring>()
+            snapshot.documents.forEach { document ->
+                val mooring = document.toObject(Mooring::class.java)
+                if (mooring != null) {
+                    mooring.firestoreId = document.id
+                    moorings.add(mooring)
+                }
+            }
             if (moorings.isNullOrEmpty()) {
                 MooringsResult.Failure.NoData
             } else {
@@ -27,9 +36,27 @@ internal class MooringsRepository @Inject constructor(
         }
     }
 
-    suspend fun addMooring(boatId: String, dto: MooringDTO): Boolean {
+    suspend fun addMooring(boatId: String, dto: AddMooringDTO): Boolean {
         return try {
             val snapshot = collection(boatId).add(dto).await()
+            true
+        } catch (e : Exception){
+            false
+        }
+    }
+
+    /**
+     * Update a Mooring or just its single field.
+     * Instead of using a unmutable dto we use a nullable Mooring
+     * object to avoid duplication and makes possible to
+     * send just a single field.
+     **/
+    suspend fun updateMooring(boatId: String, dto: UpdateMooringDTO): Boolean {
+        return try {
+            val snapshot = collection(boatId)
+                .document(dto.firestoreId.orEmpty())
+                .set(dto, SetOptions.merge())
+                .await()
             true
         } catch (e : Exception){
             false

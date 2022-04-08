@@ -21,6 +21,7 @@ internal sealed class MooringsResult {
 }
 
 internal data class Mooring(
+    var firestoreId: String? = null,
     val index: Int? = null,
     val arrivedOn: Date? = null,
     val creationDate: Date? = null,
@@ -31,7 +32,7 @@ internal data class Mooring(
     val name: String? = null
 )
 
-internal data class MooringDTO(
+internal data class AddMooringDTO(
 //    val lastUpdate: Timestamp,
 //    val leftOn: Timestamp,
 //    val latitude: String,
@@ -40,4 +41,10 @@ internal data class MooringDTO(
     val name: String,
     val creationDate: Timestamp,
     val arrivedOn: Timestamp,
+)
+
+internal data class UpdateMooringDTO(
+    var firestoreId: String? = null,
+    val lastUpdate: Timestamp? = null,
+    val leftOn: Timestamp? = null,
 )

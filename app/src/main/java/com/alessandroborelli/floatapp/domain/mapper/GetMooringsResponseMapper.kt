@@ -24,6 +24,7 @@ internal class GetMooringsResponseMapperImpl @Inject constructor():
         return MooringResult(
             data = result.data.map {
                 Mooring(
+                    id = it.firestoreId.orEmpty(), //TODO id should be not null
                     index = it.index ?: UNKNOWN_INDEX,
                     arrivedOn = mapDate(it.arrivedOn),
                     creationDate = mapDate(it.creationDate),

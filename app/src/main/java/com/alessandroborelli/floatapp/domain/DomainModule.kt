@@ -1,13 +1,17 @@
 package com.alessandroborelli.floatapp.domain
 
+import com.alessandroborelli.floatapp.domain.mapper.*
 import com.alessandroborelli.floatapp.domain.mapper.AddMooringRequestMapper
 import com.alessandroborelli.floatapp.domain.mapper.AddMooringRequestMapperImpl
 import com.alessandroborelli.floatapp.domain.mapper.GetMooringsResponseMapper
 import com.alessandroborelli.floatapp.domain.mapper.GetMooringsResponseMapperImpl
+import com.alessandroborelli.floatapp.domain.mapper.UpdateMooringRequestMapperImpl
+import com.alessandroborelli.floatapp.domain.usecase.*
 import com.alessandroborelli.floatapp.domain.usecase.AddMooringUseCase
 import com.alessandroborelli.floatapp.domain.usecase.AddMooringUseCaseImpl
 import com.alessandroborelli.floatapp.domain.usecase.GetMooringsUseCase
 import com.alessandroborelli.floatapp.domain.usecase.GetMooringsUseCaseImpl
+import com.alessandroborelli.floatapp.domain.usecase.UpdateMooringUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -27,5 +31,11 @@ internal abstract class DomainModule {
 
     @Binds
     abstract fun AddMooringUseCaseImpl.bindAddMooringUseCase(): AddMooringUseCase
+
+    @Binds
+    abstract fun UpdateMooringRequestMapperImpl.bindUpdateMooringRequestMapper(): UpdateMooringRequestMapper
+
+    @Binds
+    abstract fun UpdateMooringUseCaseImpl.bindUpdateMooringUseCase(): UpdateMooringUseCase
 
 }
