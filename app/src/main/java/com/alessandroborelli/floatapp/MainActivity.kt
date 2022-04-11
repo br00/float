@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import com.alessandroborelli.floatapp.presentation.FloatApp
 import com.alessandroborelli.floatapp.presentation.MainScreen
 import com.alessandroborelli.floatapp.presentation.MainViewModel
 import com.alessandroborelli.floatapp.ui.theme.FloatTheme
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FloatTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    MainActivityScreen(viewModel)
+                    FloatApp()
                 }
             }
         }
