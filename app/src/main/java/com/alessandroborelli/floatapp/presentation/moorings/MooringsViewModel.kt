@@ -1,4 +1,4 @@
-package com.alessandroborelli.floatapp.presentation
+package com.alessandroborelli.floatapp.presentation.moorings
 
 import androidx.lifecycle.viewModelScope
 import com.alessandroborelli.floatapp.domain.model.Result
@@ -14,32 +14,29 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-
-internal class MainViewModel @Inject constructor(
+@HiltViewModel
+internal class MooringsViewModel @Inject constructor(
     private val mooringsUseCase: GetMooringsUseCase,
     private val addMooringUseCase: AddMooringUseCase,
     private val updateMooringUseCase: UpdateMooringUseCase
-) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState.initial()) {
+) : BaseViewModel<MooringsUiState, MooringsUiEvent>(MooringsUiState.initial()) {
 
     init {
         retrieveMoorings(state.value)
     }
 
-    override fun reduce(event: MainUiEvent, state: MainUiState) {
+    override fun reduce(event: MooringsUiEvent, state: MooringsUiState) {
         when (event) {
-            is MainUiEvent.ShowHome -> {
-                retrieveMoorings(state)
-            }
-            is MainUiEvent.AddMooring -> {
+            is MooringsUiEvent.AddMooring -> {
                 addMooring(state)
             }
-            is MainUiEvent.LeaveMooring -> {
+            is MooringsUiEvent.LeaveMooring -> {
                 updateMooring(event.item, state)
             }
         }
     }
 
-    private fun retrieveMoorings(state: MainUiState) {
+    private fun retrieveMoorings(state: MooringsUiState) {
         viewModelScope.launch {
             mooringsUseCase("Y18x809Swyf3lSnYZzzJ").collect { result ->
                 when (result) {
@@ -71,7 +68,7 @@ internal class MainViewModel @Inject constructor(
         }
     }
 
-    private fun addMooring(state: MainUiState) {
+    private fun addMooring(state: MooringsUiState) {
         viewModelScope.launch {
             val params = AddMooringUseCase.Params(
                 boatId = "Y18x809Swyf3lSnYZzzJ",
@@ -105,7 +102,7 @@ internal class MainViewModel @Inject constructor(
         }
     }
 
-    private fun updateMooring(mooring: Mooring, state: MainUiState) {
+    private fun updateMooring(mooring: Mooring, state: MooringsUiState) {
         viewModelScope.launch {
             val params = UpdateMooringUseCase.Params(
                 boatId = "Y18x809Swyf3lSnYZzzJ",

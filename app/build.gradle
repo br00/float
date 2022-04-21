@@ -74,7 +74,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation("androidx.navigation:navigation-compose:$compose_nav_version")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha09")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha10")
 
 
     // Kotlin Coroutines
@@ -85,6 +85,7 @@ dependencies {
     // Dependencies Injection
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:29.0.3')
