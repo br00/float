@@ -1,10 +1,12 @@
 package com.alessandroborelli.floatapp.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 
 private val DarkColorPalette = darkColors(
     primary = canalWater200,
@@ -39,3 +41,11 @@ fun FloatTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable(
         content = content
     )
 }
+
+//TODO move to shapes?
+val BottomSheetShape = RoundedCornerShape(
+    topStart = 20.dp,
+    topEnd = 20.dp,
+    bottomStart = 0.dp,
+    bottomEnd = 0.dp
+)
