@@ -12,7 +12,7 @@ data class Mooring(
     val creationDate: String,
     val lastUpdate: String,
     val leftOn: String,
-    val latitude: String,
-    val longitude: String,
+    val latitude: Double,
+    val longitude: Double,
     val name: String
 )

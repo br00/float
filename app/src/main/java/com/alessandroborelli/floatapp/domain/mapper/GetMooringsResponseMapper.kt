@@ -30,8 +30,8 @@ internal class GetMooringsResponseMapperImpl @Inject constructor():
                     creationDate = mapDate(it.creationDate),
                     lastUpdate = mapDate(it.lastUpdate),
                     leftOn = mapDate(it.leftOn),
-                    latitude = it.latitude.orEmpty(),
-                    longitude = it.longitude.orEmpty(),
+                    latitude = it.latitude ?: 0.0, //TODO make undef constant
+                    longitude = it.longitude ?: 0.0,
                     name = it.name.orEmpty()
                 )
             }

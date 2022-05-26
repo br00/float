@@ -27,8 +27,8 @@ internal data class Mooring(
     val creationDate: Date? = null,
     val lastUpdate: Date? = null,
     val leftOn: Date? = null,
-    val latitude: String? = null,
-    val longitude: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val name: String? = null
 )
 

@@ -140,8 +140,8 @@ fun PrevMooringItem() {
         leftOn = "30 Jan (Tue) 09:30",
         creationDate = "",
         lastUpdate = "",
-        latitude = "51.53582",
-        longitude = "-0.06652",
+        latitude = 51.53582,
+        longitude = -0.06652,
         name = "3"
     )
     MooringItem(item = mooring, {})

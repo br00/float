@@ -11,26 +11,33 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alessandroborelli.floatapp.domain.model.Mooring
+import com.alessandroborelli.floatapp.presentation.home.FeatureThatRequiresLocationPermission
 import com.alessandroborelli.floatapp.ui.base.LoadingContent
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun MooringsScreen(viewModel: MooringsViewModel) {
     val state by viewModel.state.collectAsState()
-    Column {
-        when {
-            state.isLoading -> LoadingContent()
-            state.data.isNotEmpty() ->
-                MainContent(
-                    moorings = state.data,
-                    onLeftMooringClicked = {
-                        viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
-                    },
-                    onAddMooringClicked = {
-                        viewModel.onEvent(MooringsUiEvent.AddMooring)
-                    }
-                )
+    FeatureThatRequiresLocationPermission(
+        content = {
+            Column {
+                when {
+                    state.isLoading -> LoadingContent()
+                    state.data.isNotEmpty() ->
+                        MainContent(
+                            moorings = state.data,
+                            onLeftMooringClicked = {
+                                viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
+                            },
+                            onAddMooringClicked = {
+                                viewModel.onEvent(MooringsUiEvent.AddMooring)
+                            }
+                        )
+                }
+            }
         }
-    }
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -49,10 +56,10 @@ fun MainContent(
         scaffoldState = backdropState,
         peekHeight = 0.dp,
         headerHeight = frontLayerHeightDp.dp,
-        frontLayerScrimColor = Color.Unspecified,
+        frontLayerScrimColor = Color.Transparent,
         appBar = {},
         backLayerContent = {
-            MooringsMapContent()
+            MooringsMapContent(moorings)
         },
         frontLayerContent = {
             MooringsListContent(

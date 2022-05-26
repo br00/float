@@ -121,8 +121,8 @@ fun PrevMooringsList() {
             leftOn = "30 Jan (Tue) 09:30",
             creationDate = "",
             lastUpdate = "",
-            latitude = "51.53582",
-            longitude = "-0.06652",
+            latitude = 51.53582,
+            longitude = -0.06652,
             name = "1"),
         Mooring(
             id = "hvuyf79hnm;l",
@@ -131,8 +131,8 @@ fun PrevMooringsList() {
             leftOn = "20 Mar (Tue) 19:00",
             creationDate = "",
             lastUpdate = "",
-            latitude = "51.53582",
-            longitude = "-0.06652",
+            latitude = 51.53582,
+            longitude = -0.06652,
             name = "2"),
         Mooring(
             id = "hvuyf7tunm;l",
@@ -141,8 +141,8 @@ fun PrevMooringsList() {
             leftOn = "24 Mar (Tue) 12:30",
             creationDate = "",
             lastUpdate = "",
-            latitude = "51.53582",
-            longitude = "-0.06652",
+            latitude = 51.53582,
+            longitude = -0.06652,
             name = "3"),
     )
 
