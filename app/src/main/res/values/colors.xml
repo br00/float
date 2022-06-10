@@ -8,4 +8,5 @@
     <color name="dark">#44484f</color>
     <color name="light">#f4f7fa</color>
     <color name="marker">#414941</color>
+    <color name="marker_accent">#066D37</color>
 </resources>

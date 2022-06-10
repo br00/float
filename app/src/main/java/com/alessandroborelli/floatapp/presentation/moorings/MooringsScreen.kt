@@ -2,18 +2,19 @@ package com.alessandroborelli.floatapp.presentation.moorings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alessandroborelli.floatapp.domain.model.Mooring
 import com.alessandroborelli.floatapp.presentation.home.FeatureThatRequiresLocationPermission
 import com.alessandroborelli.floatapp.ui.base.LoadingContent
+import com.alessandroborelli.floatapp.ui.theme.BottomSheetShape
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -26,6 +27,7 @@ internal fun MooringsScreen(viewModel: MooringsViewModel) {
                     state.isLoading -> LoadingContent()
                     state.data.isNotEmpty() ->
                         MainContent(
+                            viewModel = viewModel,
                             moorings = state.data,
                             onLeftMooringClicked = {
                                 viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
@@ -42,30 +44,39 @@ internal fun MooringsScreen(viewModel: MooringsViewModel) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainContent(
+internal fun MainContent(
+    viewModel: MooringsViewModel,
     moorings: List<Mooring>,
     onLeftMooringClicked: (Mooring) -> Unit,
     onAddMooringClicked: () -> Unit,
     modifier: Modifier = Modifier) {
 
+    val scope = rememberCoroutineScope()
     val backdropState = rememberBackdropScaffoldState(BackdropValue.Revealed)
-    val frontLayerHeightDp = LocalConfiguration.current.screenHeightDp / 2
+    val frontLayerHeightDp = LocalConfiguration.current.screenHeightDp / 3
 
     BackdropScaffold(
         modifier = modifier,
         scaffoldState = backdropState,
         peekHeight = 0.dp,
         headerHeight = frontLayerHeightDp.dp,
+        frontLayerShape = BottomSheetShape,
         frontLayerScrimColor = Color.Transparent,
         appBar = {},
         backLayerContent = {
-            MooringsMapContent(moorings)
+            MooringsMapContent(viewModel, moorings)
         },
         frontLayerContent = {
             MooringsListContent(
+                viewModel,
                 moorings,
                 onLeftMooringClicked,
                 onAddMooringClicked,
+                onItemClick = {
+                    scope.launch {
+                        backdropState.reveal()
+                    }
+                },
                 modifier
             )
         }
@@ -73,9 +84,8 @@ fun MainContent(
 }
 
 
-
 @Preview
 @Composable
 fun PrevMoorings() {
-    MainContent(emptyList(), {}, {})
+    MainContent(hiltViewModel(), emptyList(), {}, {})
 }

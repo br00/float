@@ -17,7 +17,7 @@ internal class GetMooringsResponseMapperImpl @Inject constructor():
 
     private companion object {
         const val UNKNOWN_INDEX = -1
-        val DATE_FORMATTER = SimpleDateFormat("dd MMM (E) HH:mm", Locale.ROOT)
+        val DATE_FORMATTER = SimpleDateFormat("dd MMM (E) HH:mm", Locale.UK)
     }
 
     override fun invoke(result: MooringsResultDataLayer): MooringResult {
