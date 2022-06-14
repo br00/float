@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun LoadingContent() {
-    Surface(color = Color.LightGray) {
+    Surface {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

@@ -22,6 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.alessandroborelli.floatapp.R
 import com.alessandroborelli.floatapp.domain.model.Location
 import com.alessandroborelli.floatapp.domain.model.Mooring
+import com.alessandroborelli.floatapp.ui.base.FFilledButton
+import com.alessandroborelli.floatapp.ui.base.FOutlinedButton
 
 @Composable
 internal fun MooringsListContent(
@@ -53,7 +55,7 @@ internal fun MooringsListContent(
             )
         }
         Spacer(modifier.height(8.dp))
-        Button(
+        FFilledButton(
             modifier = modifier.padding(start = 16.dp),
             onClick = onAddMooringClicked) {
             Text(text = "Add mooring")
@@ -130,7 +132,7 @@ fun MooringItem(item: Mooring, onItemClick: (Mooring) -> Unit, onLeftMooringClic
             )
         }
         if (item.isCurrent) {
-            OutlinedButton(
+            FOutlinedButton(
                 modifier = Modifier.padding(top = 4.dp, end = 8.dp),
                 onClick = {
                     onLeftMooringClicked.invoke(item)
