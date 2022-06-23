@@ -1,5 +1,7 @@
 package com.alessandroborelli.floatapp.data
 
+import com.alessandroborelli.floatapp.domain.model.Location
+
 object Constants {
     const val COLLECTION_OWNERS = "owners"
     const val COLLECTION_BOATS = "boats"
@@ -10,4 +12,5 @@ object Constants {
         append("/")
         append("moorings")
     }
+    val LONDON = Location(51.525493,-0.0822173)
 }

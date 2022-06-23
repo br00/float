@@ -3,6 +3,7 @@ package com.alessandroborelli.floatapp.presentation.moorings
 import androidx.lifecycle.viewModelScope
 import com.alessandroborelli.floatapp.domain.model.Result
 import com.alessandroborelli.floatapp.base.BaseViewModel
+import com.alessandroborelli.floatapp.data.Constants
 import com.alessandroborelli.floatapp.domain.model.Location
 import com.alessandroborelli.floatapp.domain.model.Mooring
 import com.alessandroborelli.floatapp.domain.usecase.AddMooringUseCase
@@ -11,7 +12,6 @@ import com.alessandroborelli.floatapp.domain.usecase.UpdateMooringUseCase
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -23,10 +23,8 @@ internal class MooringsViewModel @Inject constructor(
     private val updateMooringUseCase: UpdateMooringUseCase
 ) : BaseViewModel<MooringsUiState, MooringsUiEvent>(MooringsUiState.initial()) {
 
-    private val london = Location(51.525493,-0.0822173)
-    val location = MutableStateFlow<Location>(london)
-
-    val cameraPosition = MutableStateFlow<Location?>(null)
+    //TODO move to ui state
+    private val cameraPosition = MutableStateFlow<Location?>(null)
 
     init {
         retrieveMoorings(state.value)
@@ -40,17 +38,24 @@ internal class MooringsViewModel @Inject constructor(
             is MooringsUiEvent.LeaveMooring -> {
                 updateMooring(event.item, state)
             }
+            is MooringsUiEvent.UpdateMapLocation -> {
+                updateMapLocation(event.location, state)
+            }
         }
-    }
-
-    fun setLocation(l: Location) {
-        location.value = l
     }
 
     fun setCameraPosition(l: Location) {
         if (l != cameraPosition.value) {
             cameraPosition.value = l
         }
+    }
+
+    private fun updateMapLocation(location: Location, state: MooringsUiState) {
+        setState(
+            state.copy(
+                selectedMapLocation = location
+            )
+        )
     }
 
     private fun retrieveMoorings(state: MooringsUiState) {
@@ -65,10 +70,18 @@ internal class MooringsViewModel @Inject constructor(
                         )
                     }
                     is Result.Success -> {
+                        val currentMooring = result.data.data.find { it.leftOn.isEmpty() }
+                        val initialMapLocation =
+                            if (currentMooring?.latitude != null) {
+                                Location(currentMooring.latitude, currentMooring.longitude)
+                            } else {
+                                Constants.LONDON
+                            }
                         setState(
                             state.copy(
                                 isLoading = false,
-                                data = result.data.data
+                                data = result.data.data,
+                                selectedMapLocation = initialMapLocation
                             )
                         )
                     }

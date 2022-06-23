@@ -44,7 +44,7 @@ internal fun MooringsListContent(
                         onItemClick = {
                             it.latitude.let { latitude ->
                                 it.longitude.let { longitude ->
-                                    viewModel.setLocation(Location(latitude, longitude))
+                                    viewModel.onEvent(MooringsUiEvent.UpdateMapLocation(Location(latitude, longitude)))
                                 }
                             }
                             onItemClick.invoke(mooring)

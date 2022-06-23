@@ -9,6 +9,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.alessandroborelli.floatapp.data.Constants
+import com.alessandroborelli.floatapp.domain.model.Location
 import com.alessandroborelli.floatapp.domain.model.Mooring
 import com.alessandroborelli.floatapp.presentation.home.FeatureThatRequiresLocationPermission
 import com.alessandroborelli.floatapp.ui.base.LoadingContent
@@ -54,6 +56,14 @@ internal fun MainContent(
     val scope = rememberCoroutineScope()
     val backdropState = rememberBackdropScaffoldState(BackdropValue.Revealed)
     val frontLayerHeightDp = LocalConfiguration.current.screenHeightDp / 3
+    val currentMooring = moorings.find { it.leftOn.isEmpty() }
+    val initialCurrentLocation =
+        if (currentMooring?.latitude != null) {
+            Location(currentMooring.latitude, currentMooring.longitude)
+        } else {
+            Constants.LONDON
+        }
+
 
     BackdropScaffold(
         modifier = modifier,

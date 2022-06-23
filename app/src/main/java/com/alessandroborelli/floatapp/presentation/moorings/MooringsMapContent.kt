@@ -1,17 +1,11 @@
 package com.alessandroborelli.floatapp.presentation.moorings
 
 import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.alessandroborelli.floatapp.R
 import com.alessandroborelli.floatapp.domain.model.Location
@@ -22,21 +16,12 @@ import com.google.maps.android.compose.*
 import com.google.maps.android.ui.IconGenerator
 
 @Composable
-internal fun MooringsMapContent(viewModel: MooringsViewModel, moorings: List<Mooring>) {
-
-    val location by viewModel.location.collectAsState()
-
-    //TODO val currentLatLng = LatLng(51.53407, -0.04968)
-    val currentMooring = moorings.find { it.leftOn.isEmpty() }
-
-    //TODO initial camera position with last mooring
-//    val cameraPositionState = rememberCameraPositionState {
-//        currentMooring?.let {
-//            if (it.latitude != null && it.longitude != null) {
-//                position = CameraPosition.fromLatLngZoom(LatLng(it.latitude, it.longitude), 17f)
-//            }
-//        }
-//    }
+internal fun MooringsMapContent(
+    viewModel: MooringsViewModel,
+    moorings: List<Mooring>
+) {
+    val state = viewModel.state.collectAsState()
+    val location = state.value.selectedMapLocation
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(location.latitude, location.longitude),17f)
@@ -53,7 +38,6 @@ internal fun MooringsMapContent(viewModel: MooringsViewModel, moorings: List<Moo
             viewModel.setCameraPosition(cameraLocation)
         }
     }
-
 
     // Set properties using MapProperties which you can use to recompose the map
     val mapStyle = MapStyleOptions.loadRawResourceStyle(LocalContext.current, R.raw.google_map_style)
