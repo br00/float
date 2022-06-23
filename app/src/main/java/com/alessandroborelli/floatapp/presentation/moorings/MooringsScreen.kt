@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-internal fun MooringsScreen(viewModel: MooringsViewModel) {
+internal fun MooringsScreen(viewModel: MooringsViewModel, onAddMooringClicked: () -> Unit) {
     val state by viewModel.state.collectAsState()
     FeatureThatRequiresLocationPermission(
         content = {
@@ -34,9 +34,8 @@ internal fun MooringsScreen(viewModel: MooringsViewModel) {
                             onLeftMooringClicked = {
                                 viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
                             },
-                            onAddMooringClicked = {
-                                viewModel.onEvent(MooringsUiEvent.AddMooring)
-                            }
+                            onAddMooringClicked = onAddMooringClicked
+                            //viewModel.onEvent(MooringsUiEvent.AddMooring)
                         )
                 }
             }

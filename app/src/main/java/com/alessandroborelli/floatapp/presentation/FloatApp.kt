@@ -13,7 +13,7 @@ fun FloatApp() {
         Scaffold(
             bottomBar = { FloatBottomNavigation(navController = appState.navController) }
         ) {
-            FloatNavGraph(navController = appState.navController)
+            FloatNavGraph(navController = appState.navController, appState)
         }
     }
 }

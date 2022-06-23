@@ -8,8 +8,16 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.alessandroborelli.floatapp.presentation.navigation.Screen
+
+object MainDestinations {
+    const val MAIN_ROUTE = "main"
+    const val ADD_MOORING_ROUTE = "newMooring"
+}
 
 @Composable
 fun rememberFloatAppState(
@@ -29,8 +37,34 @@ class FloatAppState(
     val navController: NavHostController,
     private val resources: Resources,
 ) {
-    //TODO what state should we keep here?
+
+    // BottomBar state source of truth
+    val screens = listOf(
+        Screen.Home,
+        Screen.Moorings,
+        Screen.Profile
+    )
+    val bottomBarTabs = screens
+    private val bottomBarRoutes = bottomBarTabs.map { it.route }
+
+    // Navigation state source of truth
+    val currentRoute: String?
+        get() = navController.currentDestination?.route
+
+    fun upPress() {
+        navController.navigateUp()
+    }
+
+    fun navigateToAddNewMooringScreen(from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate(MainDestinations.ADD_MOORING_ROUTE)
+        }
+    }
+
 }
+
+private fun NavBackStackEntry.lifecycleIsResumed() =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
 
 /**
  * A composable function that returns the [Resources]. It will be recomposed when `Configuration`
