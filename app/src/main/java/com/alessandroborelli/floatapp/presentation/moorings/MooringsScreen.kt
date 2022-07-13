@@ -35,7 +35,6 @@ internal fun MooringsScreen(viewModel: MooringsViewModel, onAddMooringClicked: (
                                 viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
                             },
                             onAddMooringClicked = onAddMooringClicked
-                            //viewModel.onEvent(MooringsUiEvent.AddMooring)
                         )
                 }
             }

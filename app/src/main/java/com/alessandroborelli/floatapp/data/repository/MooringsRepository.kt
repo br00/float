@@ -28,7 +28,7 @@ internal class MooringsRepository @Inject constructor(
                 MooringsResult.Failure.NoData
             } else {
                 MooringsResult.Success(
-                    data = moorings.sortedBy { it.creationDate }
+                    data = moorings.sortedBy { it.arrivedOn }.asReversed()
                 )
             }
         } catch (e : Exception){

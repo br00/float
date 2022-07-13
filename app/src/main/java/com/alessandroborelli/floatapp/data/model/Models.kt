@@ -33,14 +33,13 @@ internal data class Mooring(
 )
 
 internal data class AddMooringDTO(
-//    val lastUpdate: Timestamp,
-//    val leftOn: Timestamp,
-//    val latitude: String,
-//    val longitude: String,
     val index: Int,
     val name: String,
     val creationDate: Timestamp,
     val arrivedOn: Timestamp,
+    val leftOn: Timestamp?,
+    val latitude: Double,
+    val longitude: Double,
 )
 
 internal data class UpdateMooringDTO(

@@ -6,6 +6,6 @@ import com.alessandroborelli.floatapp.domain.model.Mooring
 
 sealed class MooringsUiEvent : UiEvent {
     data class LeaveMooring(val item: Mooring) : MooringsUiEvent()
-    object AddMooring : MooringsUiEvent()
+    data class AddMooring(val item: Mooring) : MooringsUiEvent()
     data class UpdateMapLocation(val location: Location) : MooringsUiEvent()
 }

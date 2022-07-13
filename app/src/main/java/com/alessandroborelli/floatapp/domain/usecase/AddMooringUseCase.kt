@@ -16,7 +16,10 @@ internal interface AddMooringUseCase {
         val index: Int,
         val name: String,
         val creationDate: Timestamp,
-        val arrivedOn: Timestamp
+        val arrivedOn: String,
+        val leftOn: String,
+        val latitude: Double,
+        val longitude: Double,
     )
 }
 

@@ -33,7 +33,7 @@ internal class MooringsViewModel @Inject constructor(
     override fun reduce(event: MooringsUiEvent, state: MooringsUiState) {
         when (event) {
             is MooringsUiEvent.AddMooring -> {
-                addMooring(state)
+                addMooring(event.item, state)
             }
             is MooringsUiEvent.LeaveMooring -> {
                 updateMooring(event.item, state)
@@ -98,14 +98,17 @@ internal class MooringsViewModel @Inject constructor(
         }
     }
 
-    private fun addMooring(state: MooringsUiState) {
+    private fun addMooring(mooring: Mooring, state: MooringsUiState) {
         viewModelScope.launch {
             val params = AddMooringUseCase.Params(
                 boatId = "Y18x809Swyf3lSnYZzzJ",
-                name = "test",
-                index = state.data.last().index+1,
+                name = "test", //TODO put 3words name
+                index = state.data.last().index+1, //TODO index is buggy
                 creationDate = Timestamp(Date()),
-                arrivedOn = Timestamp(Date())
+                arrivedOn = mooring.arrivedOn,
+                leftOn = mooring.leftOn,
+                latitude = mooring.latitude,
+                longitude = mooring.longitude
             )
             addMooringUseCase(params).collect { result ->
                 when(result) {

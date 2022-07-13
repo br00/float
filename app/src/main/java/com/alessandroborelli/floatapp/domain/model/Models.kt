@@ -1,5 +1,6 @@
 package com.alessandroborelli.floatapp.domain.model
 
+import com.alessandroborelli.floatapp.data.Constants.INVALID_LAT_LNG
 import kotlin.math.sqrt
 
 
@@ -35,6 +36,13 @@ data class Mooring(
     val displayTime =
         if (isCurrent) "arrived at: $arriveTime"
         else "arrived at: $arriveTime - left at $leftTime"
+
+    fun isValid(): Boolean {
+        return arriveDate.isNotEmpty() &&
+                latitude != INVALID_LAT_LNG &&
+                longitude != INVALID_LAT_LNG //TODO add more conditions
+
+    }
 
 }
 

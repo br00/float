@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -36,23 +37,21 @@ internal fun MooringsListContent(
 ) {
     Column(modifier.padding(16.dp)) {
         LazyColumn() {
-            items(
-                items = moorings,
-                itemContent = { mooring ->
-                    MooringItem(
-                        item = mooring,
-                        onItemClick = {
-                            it.latitude.let { latitude ->
-                                it.longitude.let { longitude ->
-                                    viewModel.onEvent(MooringsUiEvent.UpdateMapLocation(Location(latitude, longitude)))
-                                }
+            itemsIndexed(moorings) { index, item ->
+                MooringItem(
+                    index = index+1,
+                    item = item,
+                    onItemClick = {
+                        it.latitude.let { latitude ->
+                            it.longitude.let { longitude ->
+                                viewModel.onEvent(MooringsUiEvent.UpdateMapLocation(Location(latitude, longitude)))
                             }
-                            onItemClick.invoke(mooring)
-                        },
-                        onLeftMooringClicked
-                    )
-                }
-            )
+                        }
+                        onItemClick.invoke(item)
+                    },
+                    onLeftMooringClicked
+                )
+            }
         }
         Spacer(modifier.height(8.dp))
         FFilledButton(
@@ -64,7 +63,7 @@ internal fun MooringsListContent(
 }
 
 @Composable
-fun MooringItem(item: Mooring, onItemClick: (Mooring) -> Unit, onLeftMooringClicked: (Mooring) -> Unit) {
+fun MooringItem(index: Int, item: Mooring, onItemClick: (Mooring) -> Unit, onLeftMooringClicked: (Mooring) -> Unit) {
     //TODO remove hardcode strings, colors, values
     Row(
         modifier = Modifier
@@ -109,7 +108,7 @@ fun MooringItem(item: Mooring, onItemClick: (Mooring) -> Unit, onLeftMooringClic
                     .background(backgroundColor, shape = CircleShape)
             ) {
                 Text(
-                    text = item.index.toString(),
+                    text = index.toString(),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,

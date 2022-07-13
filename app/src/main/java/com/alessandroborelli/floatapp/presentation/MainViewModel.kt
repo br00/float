@@ -78,7 +78,10 @@ internal class MainViewModel @Inject constructor(
                 name = "test",
                 index = state.data.last().index+1,
                 creationDate = Timestamp(Date()),
-                arrivedOn = Timestamp(Date())
+                arrivedOn = "",
+                leftOn = "",
+                longitude = 0.0,
+                latitude = 0.0
             )
             addMooringUseCase(params).collect { result ->
                 when(result) {
