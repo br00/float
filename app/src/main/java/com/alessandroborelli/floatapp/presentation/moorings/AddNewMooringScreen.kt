@@ -34,7 +34,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 internal fun AddNewMooringScreen(viewModel: MooringsViewModel, upPress: () -> Unit) {
     val mooringState: MutableState<Mooring> = remember {
-        mutableStateOf(Mooring("",UNDEFINED_INDEX,"","","","",INVALID_LAT_LNG,INVALID_LAT_LNG,""))
+        mutableStateOf(Mooring("",UNDEFINED_INDEX,"","","","",INVALID_LAT_LNG,INVALID_LAT_LNG,"", ""))
     }
     Box(Modifier.fillMaxSize()) {
         Content(mooringState.value, onMooringUpdated = {
@@ -94,23 +94,23 @@ private fun Save(savePress: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 private fun Content(mooring: Mooring, onMooringUpdated: (Mooring) -> Unit) {
 
-    var descriptionTextError by remember { mutableStateOf(false) }
+    var notesTextError by remember { mutableStateOf(false) }
     var arriveDateTextError by remember { mutableStateOf(false) }
     var arriveTimeTextError by remember { mutableStateOf(false) }
     var leftDateTextError by remember { mutableStateOf(false) }
     var leftTimeTextError by remember { mutableStateOf(false) }
 
-    var description by remember { mutableStateOf("") }
+    var notes by remember { mutableStateOf("") }
     var arrivedDate by remember { mutableStateOf("") }
     var arrivedTime by remember { mutableStateOf("") }
     var leftDate by remember { mutableStateOf("") }
     var leftTime by remember { mutableStateOf("") }
 
 
-    val descriptionUpdates = { data : String ->
-        descriptionTextError = data.isEmpty()
-        onMooringUpdated(mooring.copy(name = data))
-        description = data
+    val notesUpdates = { data : String ->
+        notesTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(notes = data))
+        notes = data
     }
     val arriveDateUpdates = { data : String ->
         arriveDateTextError = data.isEmpty()
@@ -161,11 +161,11 @@ private fun Content(mooring: Mooring, onMooringUpdated: (Mooring) -> Unit) {
             Text(text = "Mooring details", style = MaterialTheme.typography.subtitle1)
             Spacer(modifier = Modifier.height(16.dp))
             FOutlinedTextField(
-                text = description,
-                onChange = descriptionUpdates,
-                label = "description",
+                text = notes,
+                onChange = notesUpdates,
+                label = "notes",
                 isMultiLines = true,
-                isError = descriptionTextError
+                isError = notesTextError
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row {

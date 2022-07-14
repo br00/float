@@ -81,7 +81,8 @@ internal class MainViewModel @Inject constructor(
                 arrivedOn = "",
                 leftOn = "",
                 longitude = 0.0,
-                latitude = 0.0
+                latitude = 0.0,
+                notes = ""
             )
             addMooringUseCase(params).collect { result ->
                 when(result) {

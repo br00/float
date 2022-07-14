@@ -1,36 +1,30 @@
 package com.alessandroborelli.floatapp.domain.usecase
 
 import com.alessandroborelli.floatapp.data.repository.MooringsRepository
-import com.alessandroborelli.floatapp.domain.mapper.AddMooringRequestMapper
+import com.alessandroborelli.floatapp.domain.mapper.DeleteMooringRequestMapper
+import com.alessandroborelli.floatapp.domain.mapper.UpdateMooringRequestMapper
 import com.alessandroborelli.floatapp.domain.model.Result
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-internal interface AddMooringUseCase {
+internal interface DeleteMooringUseCase {
     operator fun invoke(params: Params): Flow<Result<Boolean>>
 
     data class Params(
         val boatId: String,
-        val index: Int,
-        val name: String,
-        val creationDate: Timestamp,
-        val arrivedOn: String,
-        val leftOn: String,
-        val latitude: Double,
-        val longitude: Double,
-        val notes: String
+        val id: String
     )
 }
 
-internal class AddMooringUseCaseImpl @Inject constructor(
+internal class DeleteMooringUseCaseImpl @Inject constructor(
     private val mooringsRepository: MooringsRepository,
-    private val requestMapper: AddMooringRequestMapper
-): AddMooringUseCase {
-    override fun invoke(params: AddMooringUseCase.Params) = flow<Result<Boolean>> {
+    private val requestMapper: DeleteMooringRequestMapper
+): DeleteMooringUseCase {
+    override fun invoke(params: DeleteMooringUseCase.Params) = flow<Result<Boolean>> {
         emit(
-            mooringsRepository.addMooring(
+            mooringsRepository.deleteMooring(
                 boatId = params.boatId,
                 dto = requestMapper(params)
             ).let { isSuccessful ->

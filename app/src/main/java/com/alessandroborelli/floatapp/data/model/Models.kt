@@ -29,12 +29,14 @@ internal data class Mooring(
     val leftOn: Date? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val name: String? = null
+    val name: String? = null,
+    val notes: String? = null
 )
 
 internal data class AddMooringDTO(
     val index: Int,
     val name: String,
+    val notes: String,
     val creationDate: Timestamp,
     val arrivedOn: Timestamp,
     val leftOn: Timestamp?,
@@ -46,4 +48,8 @@ internal data class UpdateMooringDTO(
     var firestoreId: String? = null,
     val lastUpdate: Timestamp? = null,
     val leftOn: Timestamp? = null,
+)
+
+internal data class DeleteMooringDTO(
+    var firestoreId: String? = null
 )

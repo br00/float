@@ -27,7 +27,8 @@ internal class AddMooringRequestMapperImpl @Inject constructor(): AddMooringRequ
                 mapDate(params.leftOn)
             } else null,
             latitude = params.latitude,
-            longitude = params.longitude
+            longitude = params.longitude,
+            notes = params.notes
         )
     }
 

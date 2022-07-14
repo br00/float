@@ -17,7 +17,8 @@ data class Mooring(
     val leftOn: String,
     val latitude: Double,
     val longitude: Double,
-    val name: String
+    val name: String,
+    val notes: String
 ) {
     private val arriveDateTime = arrivedOn.split(") ")
     private val arriveDate = arriveDateTime.first()+")"
@@ -34,8 +35,8 @@ data class Mooring(
 
     //TODO replace with res strings
     val displayTime =
-        if (isCurrent) "arrived at: $arriveTime"
-        else "arrived at: $arriveTime - left at $leftTime"
+        if (isCurrent) "arrived at $arriveTime"
+        else "arrived at $arriveTime - left at $leftTime"
 
     fun isValid(): Boolean {
         return arriveDate.isNotEmpty() &&

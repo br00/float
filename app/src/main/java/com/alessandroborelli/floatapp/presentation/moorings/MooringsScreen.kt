@@ -34,7 +34,13 @@ internal fun MooringsScreen(viewModel: MooringsViewModel, onAddMooringClicked: (
                             onLeftMooringClicked = {
                                 viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
                             },
-                            onAddMooringClicked = onAddMooringClicked
+                            onAddMooringClicked = onAddMooringClicked,
+                            onEditMooringClicked = {
+
+                            },
+                            onDeleteMooringClicked = {
+                                viewModel.onEvent(MooringsUiEvent.DeleteMooring(it))
+                            }
                         )
                 }
             }
@@ -49,6 +55,8 @@ internal fun MainContent(
     moorings: List<Mooring>,
     onLeftMooringClicked: (Mooring) -> Unit,
     onAddMooringClicked: () -> Unit,
+    onEditMooringClicked: (Mooring) -> Unit,
+    onDeleteMooringClicked: (Mooring) -> Unit,
     modifier: Modifier = Modifier) {
 
     val scope = rememberCoroutineScope()
@@ -80,6 +88,8 @@ internal fun MainContent(
                 moorings,
                 onLeftMooringClicked,
                 onAddMooringClicked,
+                onEditMooringClicked,
+                onDeleteMooringClicked,
                 onItemClick = {
                     scope.launch {
                         backdropState.reveal()
@@ -95,5 +105,5 @@ internal fun MainContent(
 @Preview
 @Composable
 fun PrevMoorings() {
-    MainContent(hiltViewModel(), emptyList(), {}, {})
+    MainContent(hiltViewModel(), emptyList(), {}, {}, {}, {})
 }

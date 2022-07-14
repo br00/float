@@ -1,8 +1,9 @@
 package com.alessandroborelli.floatapp.data.repository
 
 import com.alessandroborelli.floatapp.data.Constants
-import com.alessandroborelli.floatapp.data.model.Mooring
 import com.alessandroborelli.floatapp.data.model.AddMooringDTO
+import com.alessandroborelli.floatapp.data.model.DeleteMooringDTO
+import com.alessandroborelli.floatapp.data.model.Mooring
 import com.alessandroborelli.floatapp.data.model.MooringsResult
 import com.alessandroborelli.floatapp.data.model.UpdateMooringDTO
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,6 +57,18 @@ internal class MooringsRepository @Inject constructor(
             val snapshot = collection(boatId)
                 .document(dto.firestoreId.orEmpty())
                 .set(dto, SetOptions.merge())
+                .await()
+            true
+        } catch (e : Exception){
+            false
+        }
+    }
+
+    suspend fun deleteMooring(boatId: String, dto: DeleteMooringDTO): Boolean {
+        return try {
+            val snapshot = collection(boatId)
+                .document(dto.firestoreId.orEmpty())
+                .delete()
                 .await()
             true
         } catch (e : Exception){
