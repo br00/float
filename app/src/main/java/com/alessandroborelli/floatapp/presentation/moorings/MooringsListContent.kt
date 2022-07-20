@@ -33,14 +33,13 @@ internal fun MooringsListContent(
     viewModel: MooringsViewModel,
     moorings: List<Mooring>,
     onLeftMooringClicked: (Mooring) -> Unit,
-    onAddMooringClicked: () -> Unit,
     onEditMooringClicked: (Mooring) -> Unit,
     onDeleteMooringClicked: (Mooring) -> Unit,
     onItemClick: (Mooring) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier.padding(16.dp)) {
-        LazyColumn(modifier.padding(top = 16.dp)) {
+        LazyColumn(modifier.padding(top = 16.dp), contentPadding = PaddingValues(bottom = 48.dp)) {
             itemsIndexed(moorings) { index, item ->
                 MooringItem(
                     index = index,
@@ -59,12 +58,6 @@ internal fun MooringsListContent(
                     onDeleteActionClicked = onDeleteMooringClicked
                 )
             }
-        }
-        Spacer(modifier.height(8.dp))
-        FFilledButton(
-            modifier = modifier.padding(start = 16.dp),
-            onClick = onAddMooringClicked) {
-            Text(text = "Add mooring")
         }
     }
 }

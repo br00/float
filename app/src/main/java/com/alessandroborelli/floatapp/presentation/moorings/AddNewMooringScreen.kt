@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,14 +60,10 @@ private fun Up(upPress: () -> Unit, modifier: Modifier = Modifier) {
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
             .size(36.dp)
-            .background(
-                color = MaterialTheme.colors.secondary.copy(alpha = 0.32f),
-                shape = CircleShape
-            )
     ) {
         Icon(
-            imageVector = mirroringBackIcon(),
-            tint = MaterialTheme.colors.onSecondary,
+            imageVector = Icons.Outlined.Close,
+            tint = MaterialTheme.colors.onBackground,
             contentDescription = stringResource(R.string.label_back)
         )
     }
