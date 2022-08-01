@@ -13,10 +13,11 @@ import com.alessandroborelli.floatapp.data.Constants
 import com.alessandroborelli.floatapp.domain.model.Location
 import com.alessandroborelli.floatapp.domain.model.Mooring
 import com.alessandroborelli.floatapp.presentation.home.FeatureThatRequiresLocationPermission
+import com.alessandroborelli.floatapp.ui.base.BlanketScaffold
+import com.alessandroborelli.floatapp.ui.base.BlanketValue
 import com.alessandroborelli.floatapp.ui.base.LoadingContent
-import com.alessandroborelli.floatapp.ui.theme.BottomSheetShape
+import com.alessandroborelli.floatapp.ui.base.rememberBlanketScaffoldState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -34,8 +35,13 @@ internal fun MooringsScreen(viewModel: MooringsViewModel, onAddMooringClicked: (
                             onLeftMooringClicked = {
                                 viewModel.onEvent(MooringsUiEvent.LeaveMooring(it))
                             },
-                            onAddMooringClicked = onAddMooringClicked
-                            //viewModel.onEvent(MooringsUiEvent.AddMooring)
+                            onAddMooringClicked = onAddMooringClicked,
+                            onEditMooringClicked = {
+
+                            },
+                            onDeleteMooringClicked = {
+                                viewModel.onEvent(MooringsUiEvent.DeleteMooring(it))
+                            }
                         )
                 }
             }
@@ -50,11 +56,11 @@ internal fun MainContent(
     moorings: List<Mooring>,
     onLeftMooringClicked: (Mooring) -> Unit,
     onAddMooringClicked: () -> Unit,
+    onEditMooringClicked: (Mooring) -> Unit,
+    onDeleteMooringClicked: (Mooring) -> Unit,
     modifier: Modifier = Modifier) {
 
-    val scope = rememberCoroutineScope()
-    val backdropState = rememberBackdropScaffoldState(BackdropValue.Revealed)
-    val frontLayerHeightDp = LocalConfiguration.current.screenHeightDp / 3
+    val frontLayerHeightDp = (LocalConfiguration.current.screenHeightDp / 2).dp
     val currentMooring = moorings.find { it.leftOn.isEmpty() }
     val initialCurrentLocation =
         if (currentMooring?.latitude != null) {
@@ -63,30 +69,29 @@ internal fun MainContent(
             Constants.LONDON
         }
 
-
-    BackdropScaffold(
-        modifier = modifier,
-        scaffoldState = backdropState,
-        peekHeight = 0.dp,
-        headerHeight = frontLayerHeightDp.dp,
-        frontLayerShape = BottomSheetShape,
-        frontLayerScrimColor = Color.Transparent,
-        appBar = {},
-        backLayerContent = {
-            MooringsMapContent(viewModel, moorings)
-        },
+    val blanketScaffoldState = rememberBlanketScaffoldState(initialValue = BlanketValue.Collapsed)
+    BlanketScaffold(
+        frontLayerExpandedHeight = frontLayerHeightDp,
+        blanketScaffoldState = blanketScaffoldState,
         frontLayerContent = {
             MooringsListContent(
                 viewModel,
                 moorings,
                 onLeftMooringClicked,
-                onAddMooringClicked,
+                onEditMooringClicked,
+                onDeleteMooringClicked,
                 onItemClick = {
-                    scope.launch {
-                        backdropState.reveal()
-                    }
+                    //TODO which action?
                 },
                 modifier
+            )
+        },
+        backLayerContent = {
+            MooringsMapContent(
+                viewModel,
+                moorings,
+                blanketScaffoldState,
+                onAddMooringClicked
             )
         }
     )
@@ -96,5 +101,5 @@ internal fun MainContent(
 @Preview
 @Composable
 fun PrevMoorings() {
-    MainContent(hiltViewModel(), emptyList(), {}, {})
+    MainContent(hiltViewModel(), emptyList(), {}, {}, {}, {})
 }

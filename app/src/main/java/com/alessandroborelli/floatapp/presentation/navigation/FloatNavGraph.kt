@@ -24,35 +24,41 @@ fun FloatNavGraph(
     navController: NavHostController = rememberNavController(),
     appState: FloatAppState
 ) {
+    val mooringsVewModel: MooringsViewModel = hiltViewModel()
     NavHost(navController, startDestination = MainDestinations.MAIN_ROUTE) {
         floatNavGraph(
             appState::navigateToAddNewMooringScreen,
-            appState::upPress
+            appState::upPress,
+            mooringsVewModel
         )
     }
 }
 
 private fun NavGraphBuilder.floatNavGraph(
     onAddNewMooring: (NavBackStackEntry) -> Unit,
-    upPress: () -> Unit) {
+    upPress: () -> Unit,
+    viewModel: MooringsViewModel
+) {
     navigation(
         route = MainDestinations.MAIN_ROUTE,
         startDestination = Screen.Home.route
     ) {
-        linkMainGraph(onAddNewMooring)
+        linkMainGraph(onAddNewMooring, viewModel)
     }
     composable(route = MainDestinations.ADD_MOORING_ROUTE) {
-        AddNewMooringScreen(upPress)
+        AddNewMooringScreen(viewModel, upPress)
     }
 }
 
-fun NavGraphBuilder.linkMainGraph(onAddNewMooring: (NavBackStackEntry) -> Unit,) {
+internal fun NavGraphBuilder.linkMainGraph(
+    onAddNewMooring: (NavBackStackEntry) -> Unit,
+    viewModel: MooringsViewModel
+) {
     composable(route = Screen.Home.route) {
         HomeScreen(title = Screen.Home.titleResId)
     }
     composable(route = Screen.Moorings.route) { from ->
-        val viewModel: MooringsViewModel = hiltViewModel()
-        MooringsScreen(viewModel, onAddMooringClicked = {onAddNewMooring(from)} )
+        MooringsScreen(viewModel, onAddMooringClicked = { onAddNewMooring(from) } )
     }
     composable(route = Screen.Profile.route) {
         ProfileScreen(title = Screen.Profile.titleResId)

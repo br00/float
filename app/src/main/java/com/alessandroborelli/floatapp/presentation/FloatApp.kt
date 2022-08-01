@@ -11,7 +11,11 @@ fun FloatApp() {
     FloatTheme {
         val appState = rememberFloatAppState()
         Scaffold(
-            bottomBar = { FloatBottomNavigation(navController = appState.navController) }
+            bottomBar = {
+                if (appState.shouldShowBottomBar) {
+                    FloatBottomNavigation(navController = appState.navController)
+                }
+            }
         ) {
             FloatNavGraph(navController = appState.navController, appState)
         }

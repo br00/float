@@ -13,4 +13,7 @@ object Constants {
         append("moorings")
     }
     val LONDON = Location(51.525493,-0.0822173)
+
+    const val UNDEFINED_INDEX = -1
+    const val INVALID_LAT_LNG = -1.0
 }

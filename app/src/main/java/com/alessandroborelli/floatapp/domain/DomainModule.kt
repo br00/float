@@ -38,4 +38,10 @@ internal abstract class DomainModule {
     @Binds
     abstract fun UpdateMooringUseCaseImpl.bindUpdateMooringUseCase(): UpdateMooringUseCase
 
+    @Binds
+    abstract fun DeleteMooringRequestMapperImpl.bindDeleteMooringRequestMapper(): DeleteMooringRequestMapper
+
+    @Binds
+    abstract fun DeleteMooringUseCaseImpl.bindDeleteMooringUseCase(): DeleteMooringUseCase
+
 }

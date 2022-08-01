@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alessandroborelli.floatapp.presentation.navigation.Screen
 
@@ -46,6 +47,12 @@ class FloatAppState(
     )
     val bottomBarTabs = screens
     private val bottomBarRoutes = bottomBarTabs.map { it.route }
+
+    // Reading this attribute will cause recompositions when the bottom bar needs shown, or not.
+    // Not all routes need to show the bottom bar.
+    val shouldShowBottomBar: Boolean
+        @Composable get() = navController
+            .currentBackStackEntryAsState().value?.destination?.route in bottomBarRoutes
 
     // Navigation state source of truth
     val currentRoute: String?

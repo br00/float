@@ -12,9 +12,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 private val DarkColorPalette = darkColors(
-    primary = canalWater200,
-    primaryVariant = canalWater200,
-    secondary = deepWater200
+    primary = grey20,
+    primaryVariant = grey30,
+    onPrimary = grey50,
+
+    secondary = blueWater,
+    onSecondary = grey10,
+
+    background = grey10,
+    onBackground = grey80,
+
+    surface = grey10,
+    onSurface = grey80,
+
+    error = Red40,
+    onError = Color.White,
 )
 
 @SuppressLint("ConflictingOnColor")
@@ -34,44 +46,6 @@ private val LightColorPalette = lightColors(
 
     error = Red40,
     onError = Color.White,
-)
-
-//private val LightColorPalette = lightColors(
-//    primary = canalWater500,
-//    primaryVariant = canalWater700,
-//    secondary = deepWater200,
-//    background = white,
-//    surface = white,
-//    onPrimary = dark,
-//    onSecondary = light,
-//    onBackground = dark,
-//    onSurface = dark,
-//)
-
-private val LightColorScheme = lightColorScheme(
-    primary = deepWater200,
-    onPrimary = Color.White,
-    primaryContainer = canalWater500,
-    onPrimaryContainer = grey30,
-    secondary = toChange,
-    onSecondary = Color.White,
-    secondaryContainer = canalWater500,
-    onSecondaryContainer = grey10,
-    tertiary = toChange2,
-    onTertiary = Color.White,
-    tertiaryContainer = Green90,
-    onTertiaryContainer = Green10,
-    error = Red40,
-    onError = Color.White,
-    errorContainer = Red90,
-    onErrorContainer = Red10,
-    background = canalWater200,
-    onBackground = grey10,
-    surface = canalWater700,
-    onSurface = grey10,
-    surfaceVariant = canalWater500,
-    onSurfaceVariant = grey10,
-    outline = deepWater700
 )
 
 @Composable

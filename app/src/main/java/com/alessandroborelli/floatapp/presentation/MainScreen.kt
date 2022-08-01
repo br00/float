@@ -142,7 +142,8 @@ fun PrevMooringItem() {
         lastUpdate = "",
         latitude = 51.53582,
         longitude = -0.06652,
-        name = "3"
+        name = "3",
+        notes = ""
     )
     MooringItem(item = mooring, {})
 }

@@ -1,62 +1,227 @@
 package com.alessandroborelli.floatapp.presentation.moorings
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alessandroborelli.floatapp.ui.utils.mirroringBackIcon
 import com.alessandroborelli.floatapp.R
+import com.alessandroborelli.floatapp.data.Constants.INVALID_LAT_LNG
+import com.alessandroborelli.floatapp.data.Constants.UNDEFINED_INDEX
+import com.alessandroborelli.floatapp.domain.model.Location
+import com.alessandroborelli.floatapp.domain.model.Mooring
+import com.alessandroborelli.floatapp.ui.base.FOutlinedDateField
+import com.alessandroborelli.floatapp.ui.base.FOutlinedTextField
+import com.alessandroborelli.floatapp.ui.base.FOutlinedTimeField
+import com.alessandroborelli.floatapp.ui.components.MapBox
 import com.alessandroborelli.floatapp.ui.theme.FloatTheme
+import com.alessandroborelli.floatapp.ui.utils.fusedLocationWrapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
-internal fun AddNewMooringScreen(upPress: () -> Unit) {
-    Box(Modifier.fillMaxSize()) {
-        Up(upPress)
-        Content()
+internal fun AddNewMooringScreen(viewModel: MooringsViewModel, upPress: () -> Unit) {
+    val mooringState: MutableState<Mooring> = remember {
+        mutableStateOf(Mooring("",UNDEFINED_INDEX,"","","","",INVALID_LAT_LNG,INVALID_LAT_LNG,"", ""))
+    }
+    Column(Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.statusBarsPadding(), verticalAlignment = Alignment.CenterVertically) {
+            Up(upPress)
+            Title(title = "Add mooring", modifier = Modifier.weight(1f))
+            Save({
+                val mooring = mooringState.value
+                if (mooring.isValid()) {
+                    upPress.invoke()
+                    viewModel.onEvent(MooringsUiEvent.AddMooring(mooring))
+                }
+            }) //TODO change callback
+        }
+        Content(mooringState.value, onMooringUpdated = {
+            mooringState.value = it
+        })
     }
 }
 
 @Composable
-private fun Up(upPress: () -> Unit) {
+private fun Up(upPress: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         onClick = upPress,
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+        modifier = modifier
+            .padding(horizontal = 16.dp)
             .size(36.dp)
-            .background(
-                color = MaterialTheme.colors.secondary.copy(alpha = 0.32f),
-                shape = CircleShape
-            )
     ) {
         Icon(
-            imageVector = mirroringBackIcon(),
-            tint = MaterialTheme.colors.onSecondary,
+            imageVector = Icons.Outlined.Close,
+            tint = MaterialTheme.colors.onBackground,
             contentDescription = stringResource(R.string.label_back)
         )
     }
 }
 
 @Composable
-private fun Content() {
-    Column(
-        modifier = Modifier.fillMaxSize()
+private fun Save(savePress: () -> Unit, modifier: Modifier = Modifier) {
+    IconButton(
+        onClick = savePress,
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .size(36.dp)
     ) {
-        Text(
-            text = "New mooring",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center
+        Icon(
+            imageVector = Icons.Outlined.Check,
+            tint = MaterialTheme.colors.secondary,
+            contentDescription = stringResource(R.string.label_save)
         )
+    }
+}
+
+@Composable
+private fun Title(title: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        modifier = modifier.padding(horizontal = 16.dp),
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.h6
+    )
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+@SuppressLint("MissingPermission")
+@Composable
+private fun Content(mooring: Mooring, onMooringUpdated: (Mooring) -> Unit) {
+
+    var notesTextError by remember { mutableStateOf(false) }
+    var arriveDateTextError by remember { mutableStateOf(false) }
+    var arriveTimeTextError by remember { mutableStateOf(false) }
+    var leftDateTextError by remember { mutableStateOf(false) }
+    var leftTimeTextError by remember { mutableStateOf(false) }
+
+    var notes by remember { mutableStateOf("") }
+    var arrivedDate by remember { mutableStateOf("") }
+    var arrivedTime by remember { mutableStateOf("") }
+    var leftDate by remember { mutableStateOf("") }
+    var leftTime by remember { mutableStateOf("") }
+
+
+    val notesUpdates = { data : String ->
+        notesTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(notes = data))
+        notes = data
+    }
+    val arriveDateUpdates = { data : String ->
+        arriveDateTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(arrivedOn = "$data $arrivedTime"))
+        arrivedDate = data
+    }
+    val arriveTimeUpdates = { data : String ->
+        arriveTimeTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(arrivedOn = "$arrivedDate $data"))
+        arrivedTime = data
+    }
+    val leftDateUpdates = { data : String ->
+        leftDateTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(leftOn = "$data $leftTime"))
+        leftDate = data
+    }
+    val leftTimeUpdates = { data : String ->
+        leftTimeTextError = data.isEmpty()
+        onMooringUpdated(mooring.copy(leftOn = "$leftDate $data"))
+        leftTime = data
+    }
+
+    val context = LocalContext.current
+    val fusedLocationWrapper = context.fusedLocationWrapper()
+    val location: MutableState<Location?> = remember {
+        mutableStateOf(null)
+    }
+    LaunchedEffect(fusedLocationWrapper) {
+        val userLocation = fusedLocationWrapper.awaitLastLocation()
+        onMooringUpdated(mooring.copy(latitude = userLocation.latitude, longitude = userLocation.longitude))
+        location.value = Location(userLocation.latitude, userLocation.longitude)
+    }
+
+    Surface {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(horizontal = 24.dp)
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(text = "Mooring details", style = MaterialTheme.typography.subtitle1)
+            Spacer(modifier = Modifier.height(16.dp))
+            FOutlinedTextField(
+                text = notes,
+                onChange = notesUpdates,
+                label = "notes",
+                isMultiLines = true,
+                isError = notesTextError
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row {
+                FOutlinedDateField(
+                    text = arrivedDate,
+                    label = "arrived on",
+                    isError = arriveDateTextError,
+                    onDateSelected = arriveDateUpdates,
+                    onChange = arriveDateUpdates,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp)
+                )
+                FOutlinedTimeField(
+                    text = arrivedTime,
+                    label = "at",
+                    isError = arriveTimeTextError,
+                    onTimeSelected = arriveTimeUpdates,
+                    onChange = { arrivedTime = it },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row {
+                FOutlinedDateField(
+                    text = leftDate,
+                    label = "left on",
+                    isError = leftDateTextError,
+                    onDateSelected = leftDateUpdates,
+                    onChange = leftDateUpdates,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp)
+                )
+                FOutlinedTimeField(
+                    text = leftTime,
+                    label = "at",
+                    isError = leftTimeTextError,
+                    onTimeSelected = leftTimeUpdates,
+                    onChange = leftTimeUpdates,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            if (location.value != null) {
+                location.value?.let {
+                    MapBox(location = it)
+                }
+            }
+        }
     }
 }
 
@@ -64,6 +229,6 @@ private fun Content() {
 @Composable
 private fun prev() {
     FloatTheme {
-        AddNewMooringScreen(upPress = {})
+        AddNewMooringScreen(hiltViewModel(), upPress = {})
     }
 }

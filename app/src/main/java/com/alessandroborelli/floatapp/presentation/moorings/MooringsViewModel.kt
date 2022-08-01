@@ -7,6 +7,7 @@ import com.alessandroborelli.floatapp.data.Constants
 import com.alessandroborelli.floatapp.domain.model.Location
 import com.alessandroborelli.floatapp.domain.model.Mooring
 import com.alessandroborelli.floatapp.domain.usecase.AddMooringUseCase
+import com.alessandroborelli.floatapp.domain.usecase.DeleteMooringUseCase
 import com.alessandroborelli.floatapp.domain.usecase.GetMooringsUseCase
 import com.alessandroborelli.floatapp.domain.usecase.UpdateMooringUseCase
 import com.google.firebase.Timestamp
@@ -20,7 +21,8 @@ import javax.inject.Inject
 internal class MooringsViewModel @Inject constructor(
     private val mooringsUseCase: GetMooringsUseCase,
     private val addMooringUseCase: AddMooringUseCase,
-    private val updateMooringUseCase: UpdateMooringUseCase
+    private val updateMooringUseCase: UpdateMooringUseCase,
+    private val deleteMooringUseCase: DeleteMooringUseCase
 ) : BaseViewModel<MooringsUiState, MooringsUiEvent>(MooringsUiState.initial()) {
 
     //TODO move to ui state
@@ -33,10 +35,13 @@ internal class MooringsViewModel @Inject constructor(
     override fun reduce(event: MooringsUiEvent, state: MooringsUiState) {
         when (event) {
             is MooringsUiEvent.AddMooring -> {
-                addMooring(state)
+                addMooring(event.item, state)
             }
             is MooringsUiEvent.LeaveMooring -> {
                 updateMooring(event.item, state)
+            }
+            is MooringsUiEvent.DeleteMooring -> {
+                deleteMooring(event.item, state)
             }
             is MooringsUiEvent.UpdateMapLocation -> {
                 updateMapLocation(event.location, state)
@@ -98,14 +103,18 @@ internal class MooringsViewModel @Inject constructor(
         }
     }
 
-    private fun addMooring(state: MooringsUiState) {
+    private fun addMooring(mooring: Mooring, state: MooringsUiState) {
         viewModelScope.launch {
             val params = AddMooringUseCase.Params(
                 boatId = "Y18x809Swyf3lSnYZzzJ",
-                name = "test",
-                index = state.data.last().index+1,
+                name = mooring.name,
+                index = state.data.last().index+1, //TODO index is buggy
                 creationDate = Timestamp(Date()),
-                arrivedOn = Timestamp(Date())
+                arrivedOn = mooring.arrivedOn,
+                leftOn = mooring.leftOn,
+                latitude = mooring.latitude,
+                longitude = mooring.longitude,
+                notes = mooring.notes
             )
             addMooringUseCase(params).collect { result ->
                 when(result) {
@@ -141,6 +150,37 @@ internal class MooringsViewModel @Inject constructor(
                 lastUpdate = Timestamp(Date())
             )
             updateMooringUseCase(params).collect { result ->
+                when(result) {
+                    is Result.Loading -> {
+                        setState(
+                            state.copy(
+                                isLoading = true,
+                            )
+                        )
+                    }
+                    is Result.Success -> {
+                        retrieveMoorings(state)
+                    }
+                    is Result.Failed -> {
+                        //TODO error message here
+                        setState(
+                            state.copy(
+                                isLoading = false,
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteMooring(mooring: Mooring, state: MooringsUiState) {
+        viewModelScope.launch {
+            val params = DeleteMooringUseCase.Params(
+                boatId = "Y18x809Swyf3lSnYZzzJ",
+                id = mooring.id
+            )
+            deleteMooringUseCase(params).collect { result ->
                 when(result) {
                     is Result.Loading -> {
                         setState(
