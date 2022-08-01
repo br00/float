@@ -167,7 +167,7 @@ internal fun MooringsMapContent(
         IconButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 40.dp)
+                .padding(end = 16.dp, bottom = 48.dp)
                 .background(color = MaterialTheme.colors.secondary, shape = CircleShape)
                 .size(48.dp),
             onClick = onAddMooringClicked

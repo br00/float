@@ -79,8 +79,8 @@ val BlanketShape = RoundedCornerShape(
 @Composable
 @ExperimentalMaterialApi
 fun BlanketScaffold(
-    frontLayerBackgroundColor: Color,
-    backLayerBackgroundColor: Color,
+    frontLayerBackgroundColor: Color = MaterialTheme.colors.surface,
+    backLayerBackgroundColor: Color = MaterialTheme.colors.background,
     frontLayerExpandedHeight: Dp = 400.dp,
     frontLayerCollapsedHeight: Dp = 200.dp,
     blanketScaffoldState: BlanketScaffoldState = rememberBlanketScaffoldState(initialValue = BlanketValue.Collapsed),
@@ -95,7 +95,7 @@ fun BlanketScaffold(
     Surface(color = backLayerBackgroundColor) {
         Box(modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight().padding(bottom = 40.dp)) {
+            .fillMaxHeight().padding(bottom = 56.dp)) { // bottomBar size so the content is not hidden
 
             Box(
                 modifier = Modifier

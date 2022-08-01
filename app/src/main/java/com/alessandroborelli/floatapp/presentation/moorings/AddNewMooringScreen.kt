@@ -37,18 +37,21 @@ internal fun AddNewMooringScreen(viewModel: MooringsViewModel, upPress: () -> Un
     val mooringState: MutableState<Mooring> = remember {
         mutableStateOf(Mooring("",UNDEFINED_INDEX,"","","","",INVALID_LAT_LNG,INVALID_LAT_LNG,"", ""))
     }
-    Box(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.statusBarsPadding(), verticalAlignment = Alignment.CenterVertically) {
+            Up(upPress)
+            Title(title = "Add mooring", modifier = Modifier.weight(1f))
+            Save({
+                val mooring = mooringState.value
+                if (mooring.isValid()) {
+                    upPress.invoke()
+                    viewModel.onEvent(MooringsUiEvent.AddMooring(mooring))
+                }
+            }) //TODO change callback
+        }
         Content(mooringState.value, onMooringUpdated = {
             mooringState.value = it
         })
-        Up(upPress, Modifier.align(Alignment.TopStart))
-        Save({
-            val mooring = mooringState.value
-            if (mooring.isValid()) {
-                upPress.invoke()
-                viewModel.onEvent(MooringsUiEvent.AddMooring(mooring))
-            }
-        }, Modifier.align(Alignment.TopEnd)) //TODO change callback
     }
 }
 
@@ -57,7 +60,6 @@ private fun Up(upPress: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         onClick = upPress,
         modifier = modifier
-            .statusBarsPadding()
             .padding(horizontal = 16.dp)
             .size(36.dp)
     ) {
@@ -74,7 +76,6 @@ private fun Save(savePress: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(
         onClick = savePress,
         modifier = modifier
-            .statusBarsPadding()
             .padding(horizontal = 16.dp)
             .size(36.dp)
     ) {
@@ -84,6 +85,16 @@ private fun Save(savePress: () -> Unit, modifier: Modifier = Modifier) {
             contentDescription = stringResource(R.string.label_save)
         )
     }
+}
+
+@Composable
+private fun Title(title: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        modifier = modifier.padding(horizontal = 16.dp),
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.h6
+    )
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -145,16 +156,10 @@ private fun Content(mooring: Mooring, onMooringUpdated: (Mooring) -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .statusBarsPadding()
+                .padding(horizontal = 24.dp)
         ) {
-            Text(
-                text = "Add mooring",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h6
-            )
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Text(text = "Mooring details", style = MaterialTheme.typography.subtitle1)
             Spacer(modifier = Modifier.height(16.dp))
             FOutlinedTextField(

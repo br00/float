@@ -71,8 +71,6 @@ internal fun MainContent(
 
     val blanketScaffoldState = rememberBlanketScaffoldState(initialValue = BlanketValue.Collapsed)
     BlanketScaffold(
-        frontLayerBackgroundColor = Color.White,
-        backLayerBackgroundColor = Color.Gray,
         frontLayerExpandedHeight = frontLayerHeightDp,
         blanketScaffoldState = blanketScaffoldState,
         frontLayerContent = {
